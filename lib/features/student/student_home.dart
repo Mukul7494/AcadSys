@@ -9,7 +9,7 @@ class StudentHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: studentAppBar(),
-      body: Center(
+      body: const Center(
         child: Text('Student Home'),
       ),
     );

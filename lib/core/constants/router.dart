@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/login.dart';
 import '../../features/auth/register.dart';
+import '../../features/auth/role_selection_Screen.dart';
 import '../../features/onboarding/welcome.dart';
 
 enum SEMSRoute {
   // onboarding
   welcome,
-
+  roleSelection,
   // auth
   login,
   register,
@@ -31,6 +32,7 @@ enum SEMSRoute {
   studentAttendanceDetail,
   studentReport,
   studentReportDetail,
+  
 }
 
 extension SEMSRouteExtension on SEMSRoute {
@@ -42,6 +44,8 @@ extension SEMSRouteExtension on SEMSRoute {
         return '/login';
       case SEMSRoute.register:
         return '/register';
+      case SEMSRoute.roleSelection:
+        return '/signup';
       case SEMSRoute.forgotPassword:
         return '/forgot-password';
       case SEMSRoute.resetPassword:
@@ -77,14 +81,15 @@ extension SEMSRouteExtension on SEMSRoute {
 }
 
 class SEMSRouter {
+  
   static MaterialPageRoute generateSEMSRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (context) => const WelcomeScreen());
       case '/login':
         return MaterialPageRoute(builder: (context) => const LoginScreen());
-      case '/register':
-        return MaterialPageRoute(builder: (context) => const RegisterScreen());
+      case '/signup':
+        return MaterialPageRoute(builder: (context) => RoleSelectionScreen());
 
       // case '/forgot-password':
       //   return UnimplementedError();
@@ -141,7 +146,26 @@ class SEMSRouter {
     }
   }
 
-  static void semsNavigateTo(BuildContext context, SEMSRoute route) {
-    Navigator.pushNamed(context, route.path);
+  static Future<T?> semsNavigateTo<T extends Object?>(
+    BuildContext context,
+    SEMSRoute route, {
+    Object? arguments,
+    bool replace = false,
+  }) {
+    final String routePath = route.path;
+
+    if (replace) {
+      return Navigator.pushReplacementNamed(
+        context,
+        routePath,
+        arguments: arguments,
+      );
+    } else {
+      return Navigator.pushNamed(
+        context,
+        routePath,
+        arguments: arguments,
+      );
+    }
   }
 }
