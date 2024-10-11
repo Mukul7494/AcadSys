@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189839201542",
+    "project_id": "semsdevop",
+    "storage_bucket": "semsdevop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189839201542:android:52c98ec1ca9d8fc74f3a87",
+        "android_client_info": {
+          "package_name": "com.sglabs.sems"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiKA9JCjqxFifGAyrclNtOW0sEM-9CYgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

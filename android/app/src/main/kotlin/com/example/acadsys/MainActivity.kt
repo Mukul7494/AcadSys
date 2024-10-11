@@ -1,4 +1,4 @@
-package com.example.acadsys
+package com.sglabs.sems
 
 import io.flutter.embedding.android.FlutterActivity
 
