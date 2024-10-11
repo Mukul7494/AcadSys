@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/router.dart';
+import '../../shared/theme/theme_toggle_button.dart';
 import 'my_app_bar.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -9,9 +11,14 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(),
-      body: const Center(
-        child: Text('Welcome'),
+      body: Column(
+        children: [
+          Text('Welcome'),
+          // ElevatedButton(onPressed: () => ),
+        ],
       ),
+      floatingActionButton: const ThemeToggleButton(),
+
     );
   }
 }

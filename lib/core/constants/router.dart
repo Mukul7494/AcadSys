@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../features/auth/login.dart';
-import '../features/auth/register.dart';
-import '../features/onboarding/welcome.dart';
+import '../../features/auth/login.dart';
+import '../../features/auth/register.dart';
+import '../../features/onboarding/welcome.dart';
 
 enum SEMSRoute {
   // onboarding

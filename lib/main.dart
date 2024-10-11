@@ -1,8 +1,10 @@
-import 'package:acadsys/shared/router.dart';
-import 'package:acadsys/shared/theme.dart';
+import 'package:acadsys/core/constants/router.dart';
+import 'package:acadsys/shared/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'shared/firebase_options.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/bloc/theme_bloc.dart';
+import 'core/network/firebase_options.dart';
 
 const _title = 'SEMS';
 void main() async {
@@ -11,36 +13,41 @@ void main() async {
     name: _title,
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp());
+  runApp(BlocProvider(
+    create: (context) => ThemeBloc(),
+    child: const MainApp(),
+  ));
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  ThemeMode _themeMode = ThemeMode.light;
-
-  void toggleThemeMode() {
-    setState(() {
-      _themeMode =
-          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      debugShowCheckedModeBanner: true,
-      theme: lightThemeData(),
-      darkTheme: darkThemeData(),
-      themeMode: _themeMode,
-      initialRoute: SEMSRoute.welcome.path,
-      onGenerateRoute: SEMSRouter.generateSEMSRoute,
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          title: _title,
+          debugShowCheckedModeBanner: true,
+          theme: lightThemeData(),
+          darkTheme: darkThemeData(),
+          themeMode: state.themeMode,
+          initialRoute: SEMSRoute.welcome.path,
+          onGenerateRoute: SEMSRouter.generateSEMSRoute,
+          builder: (context, child) {
+            return BlocListener<ThemeBloc, ThemeState>(
+              listener: (context, state) {
+                if (state.themeMode == ThemeMode.system) {
+                  final brightness = MediaQuery.of(context).platformBrightness;
+                  BlocProvider.of<ThemeBloc>(context)
+                      .add(SystemThemeChangedEvent(brightness));
+                }
+              },
+              child: child!,
+            );
+          },
+        );
+      },
     );
   }
 }

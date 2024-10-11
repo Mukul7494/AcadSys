@@ -14,6 +14,11 @@ ThemeData lightThemeData() {
         fontSize: 20,
       ),
     ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+          fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black),
+      bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
+    ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -52,6 +57,11 @@ ThemeData darkThemeData() {
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+          fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+      bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
     ),
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
