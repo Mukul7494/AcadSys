@@ -1,7 +1,7 @@
 import 'package:acadsys/features/auth/register.dart';
 import 'package:flutter/material.dart';
 
-enum UserRole { admin, student, teacher }
+enum SignInUserRole { admin, student, teacher }
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
@@ -34,11 +34,11 @@ class RoleSelectionScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToSignup(BuildContext context, UserRole role) {
+  void _navigateToSignup(BuildContext context, SignInUserRole UserRole) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RegisterScreen(role: role),
+        builder: (context) => RegisterScreen(SignInUserRole: UserRole),
       ),
     );
   }
