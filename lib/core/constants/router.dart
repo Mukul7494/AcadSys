@@ -31,7 +31,6 @@ enum SEMSRoute {
   studentAttendanceDetail,
   studentReport,
   studentReportDetail,
-  
 }
 
 extension SEMSRouteExtension on SEMSRoute {
@@ -80,7 +79,6 @@ extension SEMSRouteExtension on SEMSRoute {
 }
 
 class SEMSRouter {
-  
   static MaterialPageRoute generateSEMSRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
