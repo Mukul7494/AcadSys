@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/login.dart';
-import '../../features/auth/register.dart';
 import '../../features/auth/role_selection_Screen.dart';
 import '../../features/onboarding/welcome.dart';
 
@@ -87,7 +86,8 @@ class SEMSRouter {
       case '/login':
         return MaterialPageRoute(builder: (context) => const LoginScreen());
       case '/signup':
-        return MaterialPageRoute(builder: (context) => RoleSelectionScreen());
+        return MaterialPageRoute(
+            builder: (context) => const RoleSelectionScreen());
 
       // case '/forgot-password':
       //   return UnimplementedError();
