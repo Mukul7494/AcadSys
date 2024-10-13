@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../students/student_home.dart';
-import '../teachers/teachers_list.dart';
+import '../teachers/teachers_home.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -52,7 +52,7 @@ class _AdminHomeState extends State<AdminHome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TeacherList(),
+                      builder: (context) => const TeacherList(),
                     ),
                   );
                 },
