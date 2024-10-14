@@ -1,75 +1,46 @@
 import 'package:flutter/material.dart';
-import 'student_model.dart'; // Ensure this imports your Student model
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StudentList extends StatefulWidget {
-  const StudentList({super.key});
+import '../../core/bloc/auth_bloc.dart';
 
-  @override
-  State<StudentList> createState() => _StudentListState();
-}
-
-class _StudentListState extends State<StudentList> {
-  // List of students with their details and payment function
-  final List<Student> students = [
-    Student(
-      name: 'John Doe',
-      age: 20,
-      branch: 'Computer Science',
-      rollno: 1,
-      payment: () => print("Payment made for John Doe"),
-    ),
-    Student(
-      name: 'Jane Smith',
-      age: 22,
-      branch: 'Mathematics',
-      rollno: 2,
-      payment: () => print("Payment made for Jane Smith"),
-    ),
-    Student(
-      name: 'Michael Johnson',
-      age: 21,
-      branch: 'Physics',
-      rollno: 3,
-      payment: () => print("Payment made for Michael Johnson"),
-    ),
-    Student(
-      name: 'Emily Davis',
-      age: 19,
-      branch: 'Chemistry',
-      rollno: 4,
-      payment: () => print("Payment made for Emily Davis"),
-    ),
-  ];
+class StudentHome extends StatelessWidget {
+  const StudentHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student List'),
+          title: const Text('Student Home'),
       ),
-      body: ListView.builder(
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          final student = students[index];
-          return Card(
-            margin: const EdgeInsets.all(10.0),
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Text(student.name[0]),
-              ),
-              title: Text(student.name),
-              subtitle: Text(
-                  'Age: ${student.age}, Branch: ${student.branch}, Roll No: ${student.rollno}'),
-              trailing: ElevatedButton(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
                 onPressed: () {
-                  student.payment();
+                  context.read<AuthBloc>().signOut();
+                  AlertDialog(
+                    title: const Text('Sign Out'),
+                    content: const Text('Are you sure you want to sign out?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: const Text('Sign Out'),
+                        onPressed: () => context.read<AuthBloc>().signOut(),
+                      ),
+                    ],
+                  );
                 },
-                child: const Text('Pay'),
-              ),
-            ),
-          );
-        },
-      ),
+                child: const Text('Sign Out'),
+              )
+            ],
+          ),
+        )
+
+      
     );
   }
 }

@@ -157,16 +157,16 @@ class AuthServices {
     try {
       switch (user.role) {
         case 'Admin':
-          Navigator.pushReplacementNamed(context, SEMSRoute.adminHome.path);
+          Navigator.pushReplacementNamed(context, Routes.adminHome.path);
           break;
         case 'Teacher':
-          Navigator.pushReplacementNamed(context, SEMSRoute.teacherHome.path);
+          Navigator.pushReplacementNamed(context, Routes.teacherHome.path);
           break;
         case 'Student':
-          Navigator.pushReplacementNamed(context, SEMSRoute.studentHome.path);
+          Navigator.pushReplacementNamed(context, Routes.studentHome.path);
           break;
         case 'default_role':
-          Navigator.pushReplacementNamed(context, SEMSRoute.roleSelection.path);
+          Navigator.pushReplacementNamed(context, Routes.roleSelection.path);
           break;
         default:
           throw Exception('Unknown user role');

@@ -106,7 +106,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   void _onUserLoggedIn(UserLoggedIn event, Emitter<UserState> emit) {
-    emit(UserLoaded(event.user));
+    emit(UserLoaded(event.user)); // Update UserBloc state
   }
 
   void _onUserLoggedOut(UserLoggedOut event, Emitter<UserState> emit) {
@@ -116,4 +116,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   void logout() {
     add(UserLoggedOut());
   }
+
+  // String? getCurrentUserRole() {
+  //   if (state is UserLoaded) {
+  //     return (state as UserLoaded).role;
+  //   }
+  //   return null;
+  // }
 }
+

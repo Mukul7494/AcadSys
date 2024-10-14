@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
             const Text('Welcome'),
             ElevatedButton(
               onPressed: () =>
-                  context.goNamed(SEMSRoute.roleSelection.path),
+                  context.replace(Routes.login.path),
               child: const Text(
                 'Get Started 🏌️',
               ),

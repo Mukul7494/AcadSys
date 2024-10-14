@@ -1,9 +1,10 @@
 import 'package:acadsys/core/constants/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/bloc/auth_bloc.dart';
 import '../../core/utils/snacbar_helper.dart';
-import 'role_selection_screen.dart';
+import 'role_selection_signin.dart';
 
 class RegisterScreen extends StatefulWidget {
   final UserRole role;
@@ -151,9 +152,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context)
-                    .pushReplacementNamed(SEMSRoute.login.path);
+                context.pop();
+                context.go(Routes.login.path);
               },
             ),
           ],
