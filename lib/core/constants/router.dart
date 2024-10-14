@@ -2,7 +2,24 @@ import 'dart:async';
 import 'package:acadsys/features/students/profile.dart';
 import 'package:acadsys/features/teachers/teachers_list.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:acadsys/features/onboarding/welcome.dart';
+import 'package:acadsys/features/auth/login.dart';
+import 'package:acadsys/features/auth/register.dart';
+import '../../features/admin/admin_home.dart';
+import '../../features/attendance/attendance_page.dart';
+import '../../features/auth/role_selection_signin.dart';
+import '../../features/courses/add_courses_page.dart';
+import '../../features/social/social.dart';
+import '../../features/students/classes/classes.dart';
+import '../../features/students/home/student_bottom_nav_bar.dart';
+import '../../features/students/scanner/scanner.dart';
+import '../../features/students/student_list.dart';
+import '../../features/students/tests/test_results.dart';
+import '../../features/teachers/teacher_home.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/user_bloc.dart';
 
 // Routes names
 enum Routes {
@@ -18,6 +35,8 @@ enum Routes {
   teacherList, 
   studentHome,
   studentList,
+  attendance,
+  courses,
   classes,
   scanner,
   social,
@@ -62,8 +81,14 @@ extension RouteExtension on Routes {
         return '/teacher-home';
       case Routes.teacherList:
         return '/teacher-list';
-      default:
+      case Routes.attendance:
+        return '/attendance';
+      case Routes.courses:
+        return '/courses';
+      case Routes.notFound:
         return '/404';
+      default:
+        return '/';
 
      
     }
@@ -72,7 +97,7 @@ extension RouteExtension on Routes {
 class AppRouter {
   final BuildContext context;
 
-
+  AppRouter(this.context);
 
 GoRouter get router => _goRouter;
 
@@ -108,7 +133,7 @@ GoRouter get router => _goRouter;
       ),
       GoRoute(
         path: Routes.studentHome.path,
-        builder: (context, state) => StudentBottomNavBar(),
+        builder: (context, state) => const StudentBottomNavBar(),
       ),
       GoRoute(
         path: Routes.studentList.path,
@@ -135,6 +160,22 @@ GoRouter get router => _goRouter;
         path: Routes.teacherList.path,
         builder: (context, state) => const TeacherList(),
       ),
+      GoRoute(
+        path: Routes.teacherList.path,
+        builder: (context, state) => const TeacherList(),
+      ),
+      GoRoute(
+        path: Routes.attendance.path,
+        builder: (context, state) => const AttendancePage(),
+      ),
+      GoRoute(
+        path: Routes.courses.path,
+        builder: (context, state) => const AddCoursesPage(),
+      ),
+      // GoRoute(
+      //   path: Routes.notFound.path,
+      //   builder: (context, state) => const NotFoundScreen(),
+      // ),
     ],
     redirect: (context, state) {
       final authBloc = context.read<AuthBloc>().state;

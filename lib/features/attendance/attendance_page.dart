@@ -1,4 +1,4 @@
-import 'package:acadsys/attendance/student_attendance_card.dart';
+import 'package:acadsys/features/attendance/student_attendance_card.dart';
 import 'package:acadsys/utils/cutom_appbar.dart';
 import 'package:acadsys/utils/full_space_button.dart';
 import 'package:flutter/material.dart';

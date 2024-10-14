@@ -1,4 +1,4 @@
-import 'package:acadsys/courses/db/course_db.dart';
+import 'package:acadsys/features/courses/db/course_db.dart';
 import 'package:acadsys/student/db/student_db.dart';
 import 'package:acadsys/utils/custom_textfield.dart';
 import 'package:acadsys/utils/cutom_appbar.dart';
