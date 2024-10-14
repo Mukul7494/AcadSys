@@ -2,22 +2,7 @@ import 'dart:async';
 import 'package:acadsys/features/students/profile.dart';
 import 'package:acadsys/features/teachers/teachers_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:acadsys/features/onboarding/welcome.dart';
-import 'package:acadsys/features/auth/login.dart';
-import 'package:acadsys/features/auth/register.dart';
-import '../../features/admin/admin_home.dart';
-import '../../features/auth/role_selection_signin.dart';
-import '../../features/social/social.dart';
-import '../../features/students/classes/classes.dart';
-import '../../features/students/home/student_bottom_nav_bar.dart';
-import '../../features/students/scanner/scanner.dart';
-import '../../features/students/student_list.dart';
-import '../../features/students/tests/test_results.dart';
-import '../../features/teachers/teacher_home.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/user_bloc.dart';
+
 
 // Routes names
 enum Routes {
@@ -87,7 +72,7 @@ extension RouteExtension on Routes {
 class AppRouter {
   final BuildContext context;
 
-  AppRouter(this.context);
+
 
 GoRouter get router => _goRouter;
 
