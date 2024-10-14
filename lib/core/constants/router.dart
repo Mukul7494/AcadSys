@@ -1,169 +1,242 @@
+import 'dart:async';
+import 'package:acadsys/features/students/profile.dart';
+import 'package:acadsys/features/teachers/teachers_list.dart';
 import 'package:flutter/material.dart';
-import '../../features/auth/login.dart';
-import '../../features/auth/role_selection_Screen.dart';
-import '../../features/onboarding/welcome.dart';
 
-enum SEMSRoute {
-  // onboarding
+
+// Routes names
+enum Routes {
   welcome,
   roleSelection,
-  // auth
   login,
   register,
-  forgotPassword,
-  resetPassword,
   profile,
-
-  // admin
+  home,
   adminHome,
-  adminProfile,
-
-  // teacher
   teacherHome,
-  teacherReport,
-  teacherReportDetail,
-  teacherAttendance,
-  teacherAttendanceDetail,
-
-  // student
+ 
+  teacherList, 
   studentHome,
-  studentAttendance,
-  studentAttendanceDetail,
-  studentReport,
-  studentReportDetail,
+  studentList,
+  classes,
+  scanner,
+  social,
+  test,
+  notFound
+
 }
 
-extension SEMSRouteExtension on SEMSRoute {
+// Routes paths
+extension RouteExtension on Routes {
   String get path {
     switch (this) {
-      case SEMSRoute.welcome:
-        return '/';
-      case SEMSRoute.login:
+      case Routes.welcome:
+        return '/welcome';
+      case Routes.roleSelection:
+        return '/role-selection';
+      case Routes.login:
         return '/login';
-      case SEMSRoute.register:
+      case Routes.register:
         return '/register';
-      case SEMSRoute.roleSelection:
-        return '/signup';
-      case SEMSRoute.forgotPassword:
-        return '/forgot-password';
-      case SEMSRoute.resetPassword:
-        return '/reset-password';
-      case SEMSRoute.profile:
-        return '/profile';
-      case SEMSRoute.adminHome:
+      case Routes.home:
+        return '/home';
+      case Routes.adminHome:
         return '/admin-home';
-      case SEMSRoute.adminProfile:
-        return '/admin-profile';
-      case SEMSRoute.teacherHome:
-        return '/teacher-home';
-      case SEMSRoute.teacherReport:
-        return '/teacher-report';
-      case SEMSRoute.teacherReportDetail:
-        return '/teacher-report-detail';
-      case SEMSRoute.teacherAttendance:
-        return '/teacher-attendance';
-      case SEMSRoute.teacherAttendanceDetail:
-        return '/teacher-attendance-detail';
-      case SEMSRoute.studentHome:
+      
+      case Routes.studentHome:
         return '/student-home';
-      case SEMSRoute.studentAttendance:
-        return '/student-attendance';
-      case SEMSRoute.studentAttendanceDetail:
-        return '/student-attendance-detail';
-      case SEMSRoute.studentReport:
-        return '/student-report';
-      case SEMSRoute.studentReportDetail:
-        return '/student-report-detail';
+      case Routes.studentList:
+        return '/student-list';
+      case Routes.classes:
+        return '/classes';
+      case Routes.scanner:
+        return '/scanner';
+      case Routes.social:
+        return '/social';
+      case Routes.test:
+        return '/test';
+      case Routes.profile:
+        return '/profile';
+
+      case Routes.teacherHome:
+        return '/teacher-home';
+      case Routes.teacherList:
+        return '/teacher-list';
+      default:
+        return '/404';
+
+     
     }
   }
 }
+class AppRouter {
+  final BuildContext context;
 
-class SEMSRouter {
-  static MaterialPageRoute generateSEMSRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (context) => const WelcomeScreen());
-      case '/login':
-        return MaterialPageRoute(builder: (context) => const LoginScreen());
-      case '/signup':
-        return MaterialPageRoute(
-            builder: (context) => const RoleSelectionScreen());
 
-      // case '/forgot-password':
-      //   return UnimplementedError();
 
-      // case '/reset-password':
-      //   return UnimplementedError();
+GoRouter get router => _goRouter;
 
-      // case '/profile':
-      //   return UnimplementedError();
-      // case '/admin-home':
-      //   return UnimplementedError();
+  late final GoRouter _goRouter = GoRouter(
+    initialLocation: Routes.welcome.path,
+    routes: [
+      GoRoute(
+        path: Routes.welcome.path,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: Routes.roleSelection.path,
+        builder: (context, state) => const RoleSelectionScreen(),
+      ),
+      GoRoute(
+        path: Routes.profile.path,
+        builder: (context, state) => const MyProfile(),
+      ),
+      GoRoute(
+        path: Routes.login.path,
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: Routes.register.path,
+        builder: (context, state) {
+          final role = state.extra as UserRole?;
+          return RegisterScreen(role: role ?? UserRole.student);
+        },
+      ),
+      GoRoute(
+        path: Routes.adminHome.path,
+        builder: (context, state) => const AdminHome(),
+      ),
+      GoRoute(
+        path: Routes.studentHome.path,
+        builder: (context, state) => StudentBottomNavBar(),
+      ),
+      GoRoute(
+        path: Routes.studentList.path,
+        builder: (context, state) => const StudentList(),
+      ),
+      GoRoute(
+          path: Routes.classes.path,
+          builder: (context, state) => const ClassesScreen()),
+      GoRoute(
+          path: Routes.scanner.path,
+          builder: (context, state) => const ScannerScreen()),
+      GoRoute(
+          path: Routes.social.path,
+          builder: (context, state) => const SocialScreen()),
+      GoRoute(
+          path: Routes.test.path,
+          builder: (context, state) => const TestsScreen()),
+      
+      GoRoute(
+        path: Routes.teacherHome.path,
+        builder: (context, state) => const TeacherHome(),
+      ),
+      GoRoute(
+        path: Routes.teacherList.path,
+        builder: (context, state) => const TeacherList(),
+      ),
+    ],
+    redirect: (context, state) {
+      final authBloc = context.read<AuthBloc>().state;
+      final userBloc = context.read<UserBloc>().state;
+      final authState = authBloc;
+      final userState = userBloc;
+      final isLoggingIn = state.uri.toString() == Routes.welcome.path;
 
-      // case '/admin-profile':
-      //   return UnimplementedError();
+      if (authState is AuthLoading) {
+        if (userState is UserLoaded) {
+          switch (userState.user.role) {
+            case 'Admin':
+              return Routes.adminHome.path;
+            case 'Teacher':
+              return Routes.teacherHome.path;
+            case 'Student':
+              return Routes.studentHome.path;
+            default:
+              return Routes.login.path;
+          }
+        }
+      }
+      if (authState is AuthUnauthenticated) {
+        if (!isLoggingIn) {
+          if (userState is UserLoaded) {
+            switch (userState.user.role) {
+              case 'Admin':
+                return Routes.adminHome.path;
+              case 'Teacher':
+                return Routes.teacherHome.path;
+              case 'Student':
+                return Routes.studentHome.path;
+              default:
+                return Routes.login.path;
+            }
+          }
+        }
+      }
+      if (authState is AuthAuthenticated) {
+        if (isLoggingIn) {
+          if (userState is UserLoaded) {
+            switch (userState.user.role) {
+              case 'Admin':
+                return Routes.adminHome.path;
+              case 'Teacher':
+                return Routes.teacherHome.path;
+              case 'Student':
+                return Routes.studentHome.path;
+              
+              default:
+                return Routes.login.path;
+            }
+          }
+        }
+      }
+      // If no redirects apply, return null to allow the navigation
+      return null;
+    
+    },
+    refreshListenable: GoRouterRefreshStream(
+      context.read<AuthBloc>().stream,
+    ),
+    errorPageBuilder: (context, state) => MaterialPage(
+      key: state.pageKey,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: Center(
+          child: Text(state.error.toString()),
+        ),
+      ),
+    ),
+  );
+}
 
-      // case '/teacher-home':
-      //   return UnimplementedError();
 
-      // case '/teacher-report':
-      //   return UnimplementedError();
-
-      // case '/teacher-report-detail':
-      //   return UnimplementedError();
-
-      // case '/teacher-attendance':
-      //   return UnimplementedError();
-
-      // case '/teacher-attendance-detail':
-      //   return UnimplementedError();
-
-      // case '/student-home':
-      //   return UnimplementedError();
-
-      // case '/student-attendance':
-      //   return UnimplementedError();
-
-      // case '/student-attendance-detail':
-      //   return UnimplementedError();
-
-      // case '/student-report':
-      //   return UnimplementedError();
-
-      // case '/student-report-detail':
-      //   return UnimplementedError();
-
-      default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
-              child: Text('No Route defined for ${settings.name}'),
-            ),
-          ),
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
         );
-    }
   }
 
-  static Future<T?> semsNavigateTo<T extends Object?>(
-    BuildContext context,
-    SEMSRoute route, {
-    Object? arguments,
-    bool replace = false,
-  }) {
-    final String routePath = route.path;
+late final StreamSubscription<dynamic> _subscription;
 
-    if (replace) {
-      return Navigator.pushReplacementNamed(
-        context,
-        routePath,
-        arguments: arguments,
-      );
-    } else {
-      return Navigator.pushNamed(
-        context,
-        routePath,
-        arguments: arguments,
-      );
-    }
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
+
+// Helper function to get the home path based on user role
+String _getHomePathForRole(String role) {
+  switch (role) {
+    case 'Admin':
+      return Routes.adminHome.path;
+    case 'Teacher':
+      return Routes.teacherHome.path;
+    case 'Student':
+      return Routes.studentHome.path;
+    default:
+      return Routes.login.path;
   }
 }

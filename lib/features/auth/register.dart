@@ -1,7 +1,10 @@
+import 'package:acadsys/core/constants/router.dart';
 import 'package:flutter/material.dart';
-import 'role_selection_Screen.dart';
-
-const text = 'Register';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/bloc/auth_bloc.dart';
+import '../../core/utils/snacbar_helper.dart';
+import 'role_selection_signin.dart';
 
 class RegisterScreen extends StatefulWidget {
   final UserRole role;
@@ -13,97 +16,123 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  late String _email, _password, _name;
-  String? _studentId, _teacherId, _department;
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _idController = TextEditingController();
+  final _departmentController = TextEditingController();
+  String _selectedGender = 'male';
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _idController.dispose();
+    _departmentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-              '${widget.role.toString().split('.').last.capitalize()} Signup')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter your name' : null,
-                onSaved: (value) => _name = value!,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter your email' : null,
-                onSaved: (value) => _email = value!,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-                validator: (value) => value!.length < 6
-                    ? 'Password must be at least 6 characters'
-                    : null,
-                onSaved: (value) => _password = value!,
-              ),
-              if (widget.role == UserRole.student) ...[
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Student ID',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your student ID' : null,
-                  onSaved: (value) => _studentId = value,
+        title: Text(
+            '${widget.role.toString().split('.').last.capitalize()} Signup'),
+      ),
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            // Show loading indicator
+          } else if (state is AuthAuthenticated) {
+            _showSuccessDialog();
+          } else if (state is AuthError) {
+            SnackbarHelper.showErrorSnackBar(context, state.message);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                _buildTextField(_nameController, 'Name'),
+                _buildTextField(_emailController, 'Email'),
+                _buildTextField(_passwordController, 'Password',
+                    isPassword: true),
+                if (widget.role == UserRole.student ||
+                    widget.role == UserRole.teacher)
+                  _buildTextField(_idController,
+                      '${widget.role.toString().split('.').last.capitalize()} ID'),
+                if (widget.role == UserRole.student ||
+                    widget.role == UserRole.teacher)
+                  _buildGenderField(),
+                if (widget.role == UserRole.teacher)
+                  _buildTextField(_departmentController, 'Department'),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _submitForm(context),
+                  child: const Text('Sign Up'),
                 ),
               ],
-              if (widget.role == UserRole.teacher) ...[
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Teacher ID', border: OutlineInputBorder()),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your teacher ID' : null,
-                  onSaved: (value) => _teacherId = value,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Department',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your department' : null,
-                  onSaved: (value) => _department = value,
-                ),
-              ],
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Sign Up'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _submitForm() {
+  Widget _buildTextField(TextEditingController controller, String label,
+      {bool isPassword = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        obscureText: isPassword,
+        validator: (value) =>
+            value?.isEmpty ?? true ? 'Please enter your $label' : null,
+      ),
+    );
+  }
+
+  Widget _buildGenderField() {
+    return Row(
+      children: [
+        const Text('Gender:'),
+        Radio<String>(
+          value: 'male',
+          groupValue: _selectedGender,
+          onChanged: (value) {
+            setState(() {
+              _selectedGender = value!;
+            });
+          },
+        ),
+        const Text('Male'),
+        Radio<String>(
+          value: 'female',
+          groupValue: _selectedGender,
+          onChanged: (value) {
+            setState(() {
+              _selectedGender = value!;
+            });
+          },
+        ),
+        const Text('Female'),
+      ],
+    );
+  }
+
+  void _submitForm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      // Here you would typically send the data to your backend
-      // For now, we'll just show the success dialog
-      _showSuccessDialog();
+      context.read<AuthBloc>().registerWithEmailAndPassword(
+          _emailController.text,
+          _passwordController.text,
+          widget.role.toString().split('.').last);   
     }
   }
 
@@ -116,21 +145,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           content: const SizedBox(
             height: 100,
             child: Center(
-              child: AnimatedIcon(
-                icon: AnimatedIcons.event_add,
-                progress: AlwaysStoppedAnimation(1.0),
-                size: 50,
-                color: Colors.green,
-              ),
+              child: Icon(Icons.check_circle, size: 50, color: Colors.green),
             ),
           ),
           actions: [
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
-                // Navigate back to the home screen or login screen
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                context.pop();
+                context.go(Routes.login.path);
               },
             ),
           ],
@@ -142,6 +165,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 extension StringExtension on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
+    return "${this[0].toUpperCase()}${substring(1)}";
   }
 }

@@ -1,5 +1,6 @@
 import 'package:acadsys/core/constants/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../shared/theme/theme_toggle_button.dart';
 import 'my_app_bar.dart';
 
@@ -17,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
             const Text('Welcome'),
             ElevatedButton(
               onPressed: () =>
-                  SEMSRouter.semsNavigateTo(context, SEMSRoute.login),
+                  context.replace(Routes.login.path),
               child: const Text(
                 'Get Started 🏌️',
               ),

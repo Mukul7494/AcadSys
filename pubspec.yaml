@@ -20,9 +20,11 @@ dependencies:
   lottie: ^3.1.2
   animated_text_kit: ^4.2.2
   line_icons: ^2.0.3
+  convex_bottom_bar: ^3.2.0
 
   # Global State
   flutter_bloc: ^8.1.6
+  go_router: ^14.3.0
   equatable: ^2.0.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0

@@ -1,5 +1,7 @@
 import 'package:acadsys/features/auth/register.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/bloc/auth_bloc.dart';
 
 enum UserRole { admin, student, teacher }
 
@@ -35,10 +37,16 @@ class RoleSelectionScreen extends StatelessWidget {
   }
 
   void _navigateToSignup(BuildContext context, UserRole role) {
+    // Access the AuthBloc using BlocProvider.of
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+
+    // Call a method in AuthBloc to set the selected role
+    authBloc.setSelectedRole(role); 
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RegisterScreen(role: role),
+        builder: (context) => RegisterScreen(role: role), 
       ),
     );
   }
