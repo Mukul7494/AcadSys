@@ -17,12 +17,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
    
-    options: DefaultFirebaseOptions.web,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   await Hive.initFlutter();
   await Hive.openBox('userBox');
 
-  
 
   runApp(MultiBlocProvider(
     providers: [

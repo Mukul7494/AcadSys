@@ -19,12 +19,12 @@ class StudentDrawer extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Attendence'),
-            onTap: () => context.go(Routes.attendance.path),
+            onTap: () => context.push(Routes.attendance.path),
           ),
           const Divider(),
           ListTile(
             title: const Text('Courses'),
-            onTap: () => context.go(Routes.courses.path),
+            onTap: () => context.push(Routes.courses.path),
           ),
         ],
       ),
