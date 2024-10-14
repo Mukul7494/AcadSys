@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:acadsys/features/students/student_bottom_bar.dart';
+import 'package:acadsys/features/students/profile.dart';
 import 'package:acadsys/features/teachers/teachers_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +9,12 @@ import 'package:acadsys/features/auth/login.dart';
 import 'package:acadsys/features/auth/register.dart';
 import '../../features/admin/admin_home.dart';
 import '../../features/auth/role_selection_signin.dart';
-import '../../features/students/student_home.dart';
+import '../../features/social/social.dart';
+import '../../features/students/classes/classes.dart';
+import '../../features/students/home/student_bottom_nav_bar.dart';
+import '../../features/students/scanner/scanner.dart';
 import '../../features/students/student_list.dart';
+import '../../features/students/tests/test_results.dart';
 import '../../features/teachers/teacher_home.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/user_bloc.dart';
@@ -22,12 +25,20 @@ enum Routes {
   roleSelection,
   login,
   register,
+  profile,
   home,
   adminHome,
   teacherHome,
+ 
+  teacherList, 
   studentHome,
   studentList,
-  teacherList, 
+  classes,
+  scanner,
+  social,
+  test,
+  notFound
+
 }
 
 // Routes paths
@@ -46,12 +57,24 @@ extension RouteExtension on Routes {
         return '/home';
       case Routes.adminHome:
         return '/admin-home';
-      case Routes.teacherHome:
-        return '/teacher-home';
+      
       case Routes.studentHome:
         return '/student-home';
       case Routes.studentList:
         return '/student-list';
+      case Routes.classes:
+        return '/classes';
+      case Routes.scanner:
+        return '/scanner';
+      case Routes.social:
+        return '/social';
+      case Routes.test:
+        return '/test';
+      case Routes.profile:
+        return '/profile';
+
+      case Routes.teacherHome:
+        return '/teacher-home';
       case Routes.teacherList:
         return '/teacher-list';
       default:
@@ -73,11 +96,15 @@ GoRouter get router => _goRouter;
     routes: [
       GoRoute(
         path: Routes.welcome.path,
-        builder: (context, state) => const StudentBottomBar(),
+        builder: (context, state) => const WelcomeScreen(),
       ),
       GoRoute(
         path: Routes.roleSelection.path,
         builder: (context, state) => const RoleSelectionScreen(),
+      ),
+      GoRoute(
+        path: Routes.profile.path,
+        builder: (context, state) => const MyProfile(),
       ),
       GoRoute(
         path: Routes.login.path,
@@ -96,12 +123,25 @@ GoRouter get router => _goRouter;
       ),
       GoRoute(
         path: Routes.studentHome.path,
-        builder: (context, state) => const StudentHome(),
+        builder: (context, state) => StudentBottomNavBar(),
       ),
       GoRoute(
         path: Routes.studentList.path,
         builder: (context, state) => const StudentList(),
       ),
+      GoRoute(
+          path: Routes.classes.path,
+          builder: (context, state) => const ClassesScreen()),
+      GoRoute(
+          path: Routes.scanner.path,
+          builder: (context, state) => const ScannerScreen()),
+      GoRoute(
+          path: Routes.social.path,
+          builder: (context, state) => const SocialScreen()),
+      GoRoute(
+          path: Routes.test.path,
+          builder: (context, state) => const TestsScreen()),
+      
       GoRoute(
         path: Routes.teacherHome.path,
         builder: (context, state) => const TeacherHome(),

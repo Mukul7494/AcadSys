@@ -35,7 +35,7 @@ class ThemeState extends Equatable {
 // BLoC
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc()
-      : super(const ThemeState(ThemeMode.system, Icons.brightness_auto)) {
+      : super(const ThemeState(ThemeMode.light, Icons.brightness_auto)) {
     on<ToggleThemeEvent>(_onToggleTheme);
     on<SystemThemeChangedEvent>(_onSystemThemeChanged);
   }
@@ -48,9 +48,13 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       case ThemeMode.dark:
         emit(const ThemeState(ThemeMode.light, Icons.dark_mode));
         break;
+      
       case ThemeMode.system:
-        emit(const ThemeState(ThemeMode.dark, Icons.light_mode));
-        break;
+        if (state.themeMode == ThemeMode.dark) {
+          emit(const ThemeState(ThemeMode.light, Icons.dark_mode));
+        } else {
+          emit(const ThemeState(ThemeMode.dark, Icons.light_mode));
+        }
     }
   }
 

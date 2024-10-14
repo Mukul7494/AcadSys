@@ -1,6 +1,6 @@
+import 'package:acadsys/features/students/student_bottom_bar.dart';
 import 'package:acadsys/shared/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -36,6 +36,7 @@ Future<void> main() async {
           userBloc: BlocProvider.of<UserBloc>(context),
         ),
       ),
+      BlocProvider<StudentBottomBar>(create: (context) => StudentBottomBar()),
     ],
     child: const MainApp(),
   ));
