@@ -36,6 +36,7 @@ class RegisterWithEmailAndPasswordEvent extends AuthEvent {
 }
 
 class SignOutEvent extends AuthEvent {}
+
 // AuthState
 abstract class AuthState {}
 
@@ -49,10 +50,12 @@ class AuthAuthenticated extends AuthState {
 class AuthUnauthenticated extends AuthState {}
 
 class AuthLoading extends AuthState {}
+
 class RoleSelectedState extends AuthState {
   final UserRole role;
   RoleSelectedState(this.role);
 }
+
 class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
@@ -81,10 +84,12 @@ class AuthBloc extends Cubit<AuthState> {
       }
     });
   }
+
   // Method to set the selected role
   void setSelectedRole(UserRole role) {
     emit(RoleSelectedState(role));
   }
+
   Future<void> _fetchAndUpdateUserData(String uid) async {
     try {
       final userDoc = await _authServices.getUsersCollection().doc(uid).get();
@@ -93,7 +98,7 @@ class AuthBloc extends Cubit<AuthState> {
         emit(AuthAuthenticated(userModel));
 
         // Add UserLoggedIn event to UserBloc
-        _userBloc.add(UserLoggedIn(userModel)); 
+        _userBloc.add(UserLoggedIn(userModel));
       } else {
         emit(AuthError('User not found'));
       }
@@ -104,6 +109,7 @@ class AuthBloc extends Cubit<AuthState> {
       emit(AuthError('Failed to fetch user data'));
     }
   }
+
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
       emit(AuthLoading());
@@ -155,6 +161,4 @@ class AuthBloc extends Cubit<AuthState> {
       emit(AuthError('Failed to sign out: ${e.toString()}'));
     }
   }
-
-
 }

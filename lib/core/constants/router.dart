@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:acadsys/features/batches/batches_list.dart';
+import 'package:acadsys/features/batches/new_batch.dart';
 import 'package:acadsys/features/students/profile.dart';
 import 'package:acadsys/features/teachers/teachers_list.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,14 @@ import '../../features/teachers/teacher_home.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/user_bloc.dart';
 
+//steps for routing
+
+//1. register name in Routes enum
+//2. create the path in RouteExtension
+//3. add the file to the GoRoute
+
 // Routes names
+
 enum Routes {
   welcome,
   roleSelection,
@@ -31,8 +40,8 @@ enum Routes {
   home,
   adminHome,
   teacherHome,
- 
-  teacherList, 
+
+  teacherList,
   studentHome,
   studentList,
   attendance,
@@ -41,8 +50,10 @@ enum Routes {
   scanner,
   social,
   test,
-  notFound
+  batchList,
+  newBatch,
 
+  notFound
 }
 
 // Routes paths
@@ -61,7 +72,7 @@ extension RouteExtension on Routes {
         return '/home';
       case Routes.adminHome:
         return '/admin-home';
-      
+
       case Routes.studentHome:
         return '/student-home';
       case Routes.studentList:
@@ -85,24 +96,33 @@ extension RouteExtension on Routes {
         return '/attendance';
       case Routes.courses:
         return '/courses';
+
+      case Routes.batchList:
+        return '/batch-list';
+
+      case Routes.newBatch:
+        return '/new-batch';
+
+      //not found
       case Routes.notFound:
         return '/404';
+
       default:
         return '/';
-
-     
     }
   }
 }
+
 class AppRouter {
   final BuildContext context;
 
   AppRouter(this.context);
 
-GoRouter get router => _goRouter;
+  GoRouter get router => _goRouter;
 
   late final GoRouter _goRouter = GoRouter(
-    initialLocation: Routes.welcome.path,
+    //here we are setting the initialLocation of the app
+    initialLocation: Routes.newBatch.path,
     routes: [
       GoRoute(
         path: Routes.welcome.path,
@@ -151,7 +171,7 @@ GoRouter get router => _goRouter;
       GoRoute(
           path: Routes.test.path,
           builder: (context, state) => const TestsScreen()),
-      
+
       GoRoute(
         path: Routes.teacherHome.path,
         builder: (context, state) => const TeacherHome(),
@@ -172,6 +192,16 @@ GoRouter get router => _goRouter;
         path: Routes.courses.path,
         builder: (context, state) => const AddCoursesPage(),
       ),
+
+      GoRoute(
+        path: Routes.batchList.path,
+        builder: (context, state) => const BatchesList(),
+      ),
+      GoRoute(
+        path: Routes.newBatch.path,
+        builder: (context, state) => const NewBatch(),
+      ),
+
       // GoRoute(
       //   path: Routes.notFound.path,
       //   builder: (context, state) => const NotFoundScreen(),
@@ -224,7 +254,7 @@ GoRouter get router => _goRouter;
                 return Routes.teacherHome.path;
               case 'Student':
                 return Routes.studentHome.path;
-              
+
               default:
                 return Routes.login.path;
             }
@@ -233,7 +263,6 @@ GoRouter get router => _goRouter;
       }
       // If no redirects apply, return null to allow the navigation
       return null;
-    
     },
     refreshListenable: GoRouterRefreshStream(
       context.read<AuthBloc>().stream,
@@ -250,7 +279,6 @@ GoRouter get router => _goRouter;
   );
 }
 
-
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
@@ -259,7 +287,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
         );
   }
 
-late final StreamSubscription<dynamic> _subscription;
+  late final StreamSubscription<dynamic> _subscription;
 
   @override
   void dispose() {

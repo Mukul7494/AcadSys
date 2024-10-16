@@ -5,7 +5,6 @@ class ClassesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Classes'));
-    
+    return const Center(child: Text('Classes'));
   }
 }

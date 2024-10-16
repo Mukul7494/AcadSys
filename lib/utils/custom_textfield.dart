@@ -6,12 +6,14 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool? isNumeric;
   final bool? isMobile;
+  final bool? isDisabled;
   const CustomTextField({
     super.key,
     required this.title,
     required this.controller,
     this.isNumeric = false,
     this.isMobile = false,
+    this.isDisabled = false,
   });
 
   @override
@@ -19,6 +21,8 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        style: const TextStyle(color: Colors.black),
+        enabled: !isDisabled!,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter $title';
@@ -36,7 +40,14 @@ class CustomTextField extends StatelessWidget {
         ],
         decoration: InputDecoration(
           labelText: title,
+
+          labelStyle: const TextStyle(color: Colors.black),
           border: const OutlineInputBorder(),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+
+          // disabledBorder: const OutlineInputBorder(),
         ),
       ),
     );

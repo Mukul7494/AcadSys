@@ -1,10 +1,8 @@
 import 'package:acadsys/core/constants/router.dart';
-import 'package:acadsys/core/utils/snacbar_helper.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../shared/theme/theme_toggle_button.dart';
 import '../../social/social.dart';
 import '../classes/classes.dart';
 import '../scanner/scanner.dart';

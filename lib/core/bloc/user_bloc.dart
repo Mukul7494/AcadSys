@@ -124,4 +124,3 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   //   return null;
   // }
 }
-

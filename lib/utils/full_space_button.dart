@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class FullSpaceButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const FullSpaceButton({super.key, required this.onPressed});
+  final String? label;
+  const FullSpaceButton({super.key, required this.onPressed, this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,9 @@ class FullSpaceButton extends StatelessWidget {
       child: Center(
         child: TextButton(
           onPressed: onPressed,
-          child: const Text(
-            'Submit',
-            style: TextStyle(
+          child: Text(
+            label ?? 'Submit',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
             ),

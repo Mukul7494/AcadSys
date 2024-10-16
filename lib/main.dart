@@ -16,12 +16,10 @@ const _title = 'SEMS';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-   
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await Hive.initFlutter();
   await Hive.openBox('userBox');
-
 
   runApp(MultiBlocProvider(
     providers: [
@@ -73,4 +71,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-

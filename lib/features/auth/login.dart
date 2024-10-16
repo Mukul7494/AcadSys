@@ -6,7 +6,7 @@ import '../../core/utils/snacbar_helper.dart';
 import '../../shared/theme/theme_toggle_button.dart';
 import 'auth_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/bloc/auth_bloc.dart'; 
+import '../../core/bloc/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,7 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
-void _navigateToHomeScreen(BuildContext context, String role) {
+
+  void _navigateToHomeScreen(BuildContext context, String role) {
     switch (role.toLowerCase()) {
       case 'admin':
         context.go(Routes.adminHome.path);
@@ -45,7 +46,6 @@ void _navigateToHomeScreen(BuildContext context, String role) {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: authAppBar(context),
       body: BlocListener<AuthBloc, AuthState>(
@@ -145,7 +145,7 @@ void _navigateToHomeScreen(BuildContext context, String role) {
                       _passwordController.text,
                     );
               }
-            }, 
+            },
       child: _isLoading
           ? const CircularProgressIndicator()
           : const Text('Login', style: TextStyle(fontSize: 18)),
@@ -158,18 +158,16 @@ void _navigateToHomeScreen(BuildContext context, String role) {
           ? null
           : () {
               context.read<AuthBloc>().signInWithGoogle();
-            }, 
+            },
       child: const Text('Sign in with Google'),
     );
   }
 
   Widget _buildRegisterButton() {
     return TextButton(
-      onPressed: _isLoading
-          ? null
-          : () => context.push(Routes.roleSelection.path),
+      onPressed:
+          _isLoading ? null : () => context.push(Routes.roleSelection.path),
       child: const Text('Don\'t have an account? Register'),
     );
   }
-
 }
